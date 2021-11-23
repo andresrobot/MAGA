@@ -1,0 +1,40 @@
+<div class="container p-4">
+    <div class="row">
+        {{#each citas}}
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+
+                    <h3 class="card-title text-uppercase">
+                        {{fecha}}
+                    </h3>
+                    <p class="text-muted">
+                        {{timeago created_at}}
+                    </p>
+                    <a class="btn btn-danger" href="/concierge/deleteCita/{{IDCita}}">
+                        Eliminar cita
+                    </a>
+                    <a class="btn btn-secondary" href="/concierge/editCita/{{IDCita}}">
+                        Cambiar cita
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="col-md-4 mx-auto">
+            <div class="card card-body text-center">
+                <p>No hay ninguna cita agendada.</p>
+            </div>
+        </div>
+        {{/each}}
+        <div class="col-md-3">
+            <div class="card card-body">
+                <p class="text-center">
+                    <a href="/concierge/nuevaCita" class="btn btn-primary">Agenda una cita</a>
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>

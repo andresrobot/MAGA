@@ -1,0 +1,17 @@
+<div class="col-md-4 mx-auto">
+
+    <div class="card">
+        <div class="card-body">
+            <form action="/concierge/editCita/{{cita.IDPaciente}}" method="POST">
+                <div class="form-group">
+                    <input type="date" name="fecha" class="form-control" placeholder="Title" value="{{cita.fecha}}" autofocus>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success btn-block">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
