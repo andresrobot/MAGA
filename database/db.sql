@@ -1,44 +1,43 @@
-CREATE DATABASE db_links;
+CREATE DATABASE `db_links` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 
-USE db_links;
-
--- TABLE USER
--- all pasword wil be encrypted using SHA1
-CREATE TABLE users (
-  id INT(11) NOT NULL,
-  username VARCHAR(16) NOT NULL,
-  password VARCHAR(60) NOT NULL,
-  fullname VARCHAR(100) NOT NULL
-);
-
-ALTER TABLE users
-  ADD PRIMARY KEY (id);
-
-ALTER TABLE users
-  MODIFY id INT(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 2;
-
-DESCRIBE users;
-
-INSERT INTO users (id, username, password, fullname) 
-  VALUES (1, 'john', 'password1', 'John Carter');
-
-SELECT * FROM users;
-
--- LINKS TABLE
-CREATE TABLE links (
-  id INT(11) NOT NULL,
-  title VARCHAR(150) NOT NULL,
-  url VARCHAR(255) NOT NULL,
-  description TEXT,
-  user_id INT(11),
-  created_at timestamp NOT NULL DEFAULT current_timestamp,
-  CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id)
-);
-
-ALTER TABLE links
-  ADD PRIMARY KEY (id);
-
-ALTER TABLE links
-  MODIFY id INT(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 1;
-
-DESCRIBE links;
+CREATE TABLE `citas` (
+  `IDCita` int(11) NOT NULL AUTO_INCREMENT,
+  `IDPaciente` int(11) NOT NULL,
+  `fecha` date DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`IDCita`),
+  KEY `fk_citapaciente` (`IDPaciente`),
+  CONSTRAINT `fk_citapaciente` FOREIGN KEY (`IDPaciente`) REFERENCES `paciente` (`IDPaciente`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(150) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `fk_user` (`user_id`),
+  CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `paciente` (
+  `IDPaciente` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `edad` int(11) NOT NULL,
+  `apellidoMaterno` varchar(50) NOT NULL,
+  `apellidoPaterno` varchar(50) NOT NULL,
+  PRIMARY KEY (`IDPaciente`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `sessions` (
+  `session_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `expires` int(11) unsigned NOT NULL,
+  `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  PRIMARY KEY (`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(16) NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `fullname` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
