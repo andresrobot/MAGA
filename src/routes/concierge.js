@@ -20,7 +20,10 @@ router.get('/nuevaCita', isLoggedIn, async (req, res) => {
 });
 
 router.get('/medicamentos', isLoggedIn, async (req, res) => {
-    const medicamentos = await pool.query('SELECT * FROM medicamentos WHERE IDPaciente = ?', [req.user.id]);
+    const medicamentos = await pool.query(`select medicamentos.IDMedicamento, medicamentos.nombreMedicamento, medicamentospacientes.indicaciones
+    from medicamentos inner join medicamentospacientes
+    on medicamentospacientes.IDMedicamento=medicamentos.IDMedicamento
+    where medicamentospacientes.IDPaciente=?`, [req.user.id]);
     res.render('concierge/medicamentos', { medicamentos });
 
 });
@@ -65,7 +68,7 @@ router.post('/nuevaCita', async (req, res) => {
     };
     console.log(nuevaCita);
     await pool.query('INSERT INTO citas set ?', [nuevaCita]);
-    req.flash('success', 'Link Saved Successfully');
+    req.flash('success', 'Cita agendada correctamente');
     res.redirect('/concierge/citas');
 });
 module.exports = router;
