@@ -7,6 +7,7 @@ CREATE TABLE `paciente` (
   `edad` int(11) NOT NULL,
   `apellidoMaterno` varchar(50) NOT NULL,
   `apellidoPaterno` varchar(50) NOT NULL,
+  `user_id` int(11) NOT NULL,
   PRIMARY KEY (`IDPaciente`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
@@ -14,7 +15,8 @@ CREATE TABLE `paciente` (
 CREATE TABLE `citas` (
   `IDCita` int(11) NOT NULL AUTO_INCREMENT,
   `IDPaciente` int(11) NOT NULL,
-  `fecha` date DEFAULT NULL,
+  `fecha` date NOT NULL,
+  `hora` time NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`IDCita`),
   KEY `fk_citapaciente` (`IDPaciente`),
@@ -33,6 +35,7 @@ CREATE TABLE `users` (
   `username` varchar(16) NOT NULL,
   `password` varchar(60) NOT NULL,
   `fullname` varchar(100) NOT NULL,
+  `isPaciente` bool NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
@@ -51,7 +54,7 @@ CREATE TABLE `links` (
 CREATE TABLE `medicamentos` (
   `IDMedicamento` int(11) NOT NULL AUTO_INCREMENT,
   `nombreMedicamento` varchar(100) NOT NULL,
-  `fecha` datetime DEFAULT NULL,
+  `fecha` date NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
    PRIMARY KEY (`IDMedicamento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
@@ -66,4 +69,22 @@ CREATE TABLE `medicamentospacientes` (
   CONSTRAINT `fk_pacMP` FOREIGN KEY (`IDPaciente`) REFERENCES `paciente` (`IDPaciente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `doctores` (
+  `IDDoctor` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `edad` int(11) NOT NULL,
+  `apellidoMaterno` varchar(50) NOT NULL,
+  `apellidoPaterno` varchar(50) NOT NULL,
+  PRIMARY KEY (`IDDoctor`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
+
+CREATE TABLE `citasdoctores` (
+  `IDCita` int(11) NOT NULL,
+  `IDDoctor` int(11) NOT NULL,
+  KEY `fk_citaCD` (`IDCita`),
+  KEY `fk_drCD` (`IDDoctor`),
+  CONSTRAINT `fk_citaCD` FOREIGN KEY (`IDCita`) REFERENCES `citas` (`IDCita`),
+  CONSTRAINT `fk_drCD` FOREIGN KEY (`IDDoctor`) REFERENCES `doctores` (`IDDoctor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -4,7 +4,12 @@
         <div class="card-body">
             <form action="/concierge/editCita/{{cita.IDPaciente}}" method="POST">
                 <div class="form-group">
-                    <input type="date" name="fecha" class="form-control" placeholder="Title" value="{{cita.fecha}}" autofocus>
+                    <input type="date" name="fecha" class="form-control" placeholder="Fecha" value={{cita.fecha}}
+                        autofocus>
+                </div>
+                <div class="form-group">
+                    <input type="time" id="inputMDEx1" class="form-control" name="hora" value={{cita.hora}}>
+                    <label for="inputMDEx1">Determine una nueva hora.</label>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-success btn-block">

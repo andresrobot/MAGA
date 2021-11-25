@@ -9,7 +9,13 @@ router.get('/', isLoggedIn, async (req, res) => {
 });
 
 router.get('/citas', isLoggedIn, async (req, res) => {
-    const citas = await pool.query('SELECT * FROM citas WHERE IDPaciente = ?', [req.user.id]);
+    const citas = await pool.query(`SELECT * 
+    FROM citas INNER JOIN citasdoctores
+    ON citasdoctores.IDCita = citas.IDCita
+    INNER JOIN doctores 
+    on citasdoctores.IDDoctor = doctores.IDDoctor
+    WHERE IDPaciente = ?`, [req.user.id]);
+    console.log(citas);
     res.render('concierge/citas', { citas });
 
 });
@@ -61,9 +67,10 @@ router.post('/editCita/:id', async (req, res) => {
 });
 
 router.post('/nuevaCita', async (req, res) => {
-    const { IDDoctor, fecha } = req.body;
+    const { IDDoctor, fecha, hora } = req.body;
     const nuevaCita = {
         fecha: fecha,
+        hora: hora,
         IDPaciente: req.user.id
     };
     console.log(nuevaCita);
