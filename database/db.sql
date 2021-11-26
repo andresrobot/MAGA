@@ -3,10 +3,10 @@ CREATE DATABASE `db_links` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE  db_links;
 CREATE TABLE `paciente` (
   `IDPaciente` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(50) NOT NULL,
+  `nombre` varchar(150) NOT NULL,
   `edad` int(11) NOT NULL,
-  `apellidoMaterno` varchar(50) NOT NULL,
-  `apellidoPaterno` varchar(50) NOT NULL,
+  `apellidoMaterno` varchar(150) NOT NULL,
+  `apellidoPaterno` varchar(150) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`IDPaciente`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
@@ -39,17 +39,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `links` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(150) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `fk_user` (`user_id`),
-  CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
 
 CREATE TABLE `medicamentos` (
   `IDMedicamento` int(11) NOT NULL AUTO_INCREMENT,
@@ -74,8 +64,9 @@ CREATE TABLE `doctores` (
   `user_id` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `edad` int(11) NOT NULL,
-  `apellidoMaterno` varchar(50) NOT NULL,
-  `apellidoPaterno` varchar(50) NOT NULL,
+  `apellidoMaterno` varchar(150) NOT NULL,
+  `apellidoPaterno` varchar(150) NOT NULL,
+  `especialidad`varchar(150) NOT NULL
   PRIMARY KEY (`IDDoctor`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
@@ -88,3 +79,16 @@ CREATE TABLE `citasdoctores` (
   CONSTRAINT `fk_citaCD` FOREIGN KEY (`IDCita`) REFERENCES `citas` (`IDCita`),
   CONSTRAINT `fk_drCD` FOREIGN KEY (`IDDoctor`) REFERENCES `doctores` (`IDDoctor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(150) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `fk_user` (`user_id`),
+  CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;

@@ -15,13 +15,14 @@ router.get('/citas', isLoggedIn, async (req, res) => {
     INNER JOIN doctores 
     on citasdoctores.IDDoctor = doctores.IDDoctor
     WHERE IDPaciente = ?`, [req.user.id]);
-    console.log(citas);
+    //console.log(citas);
     res.render('concierge/citas', { citas });
 
 });
 
 router.get('/nuevaCita', isLoggedIn, async (req, res) => {
-    res.render('concierge/nuevaCita');
+    const doctores = await pool.query(`SELECT * FROM doctores`);
+    res.render('concierge/nuevaCita', {doctores});
 
 });
 
@@ -31,7 +32,6 @@ router.get('/medicamentos', isLoggedIn, async (req, res) => {
     on medicamentospacientes.IDMedicamento=medicamentos.IDMedicamento
     where medicamentospacientes.IDPaciente=?`, [req.user.id]);
     res.render('concierge/medicamentos', { medicamentos });
-
 });
 
 router.get('/deleteCita/:id', async (req, res) => {
@@ -43,10 +43,14 @@ router.get('/deleteCita/:id', async (req, res) => {
 
 router.get('/editCita/:id', async (req, res) => {
     const { id } = req.params;
-    const citas = await pool.query('SELECT * FROM citas WHERE IDCita = ?', [id]);
+    const citas = await pool.query(`SELECT * FROM citas INNER JOIN citasdoctores
+    ON citasdoctores.IDCita = citas.IDCita INNER JOIN doctores 
+    ON citasdoctores.IDDoctor = doctores.IDDoctor WHERE citas.IDCita = ?`, [id]);
+    const doctores = await pool.query(`SELECT * FROM doctores`);
+
     //const citas = null;
     //console.log(links);
-    res.render('concierge/editCita', {cita: citas[0]});
+    res.render('concierge/editCita', {cita: citas[0], doctores: doctores});
 });
 
 
@@ -54,14 +58,16 @@ router.get('/editCita/:id', async (req, res) => {
 //MÉTODOS POST
 
 router.post('/editCita/:id', async (req, res) => {
+    console.log(req.params)
     const { id } = req.params;
-    const { IDDoctor, fecha } = req.body;
+    const { IDDoctor, fecha, hora } = req.body;
     const nuevaCita = {
         fecha: fecha,
+        hora: hora,
         IDPaciente: req.user.id
     };
-    console.log(nuevaCita);
-    await pool.query('UPDATE citas set ? WHERE IDPaciente = ?', [nuevaCita, id]);
+    console.log(nuevaCita, id);
+    await pool.query('UPDATE citas set ? WHERE IDCita = ?', [nuevaCita, id]);
     req.flash('success', 'Cita actualizada');
     res.redirect('/concierge/citas');
 });
@@ -73,8 +79,15 @@ router.post('/nuevaCita', async (req, res) => {
         hora: hora,
         IDPaciente: req.user.id
     };
-    console.log(nuevaCita);
     await pool.query('INSERT INTO citas set ?', [nuevaCita]);
+    const cita_ID = await pool.query('SELECT citas.IDCita FROM citas WHERE fecha = ?', fecha)
+    const nuevaCitaPacienteDoctor = {
+        IDDoctor: IDDoctor,
+        IDCita : cita_ID[0].IDCita
+    }
+    console.log("HOOOOLA", nuevaCitaPacienteDoctor);
+    
+    await pool.query('INSERT INTO citasdoctores set ?', [nuevaCitaPacienteDoctor]);
     req.flash('success', 'Cita agendada correctamente');
     res.redirect('/concierge/citas');
 });
