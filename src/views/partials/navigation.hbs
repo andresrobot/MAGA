@@ -26,8 +26,9 @@
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/molecularTest">RECORDATORIOS</a>
 
-            {{else}}
+            {{#if user.IDDoctor}}
             <a class="dropdown-item" href="/molecularTest">RECORDATORIOS</a>
+            {{/if}}
             {{/if}}
           </div>
         </li>

@@ -4,6 +4,7 @@ const router = express.Router();
 const passport = require('passport');
 const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 
+const pool = require('../database');
 // SIGNUP
 router.get('/signup', isNotLoggedIn, (req, res) => {
   res.render('auth/signup');
@@ -42,8 +43,23 @@ router.get('/logout', isLoggedIn, (req, res) => {
   res.redirect('/');
 });
 
-router.get('/profile', isLoggedIn, (req, res) => {
-  res.render('profile');
+router.get('/profile', isLoggedIn, async (req, res) => {
+  if (req.user.IDPaciente){
+    const data = await pool.query(`SELECT * FROM paciente WHERE IDPaciente = ?`, req.user.IDPaciente)
+    res.render('profile', {data: data[0]});
+  }
+  else if(req.user.IDDoctor)
+  {
+  const data = await pool.query(`SELECT * FROM doctores WHERE IDDoctor = ?`, req.user.IDDoctor);
+    res.render('profile', {data: data[0]})
+  }
+  else if(req.user.IDAseguradora)
+  {
+
+  }
+  else if (req.user.IDCirculo){
+    
+  }
 });
 
 module.exports = router;

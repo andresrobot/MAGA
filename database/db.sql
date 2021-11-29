@@ -58,8 +58,8 @@ CREATE TABLE `medicamentospacientes` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   KEY `fk_medMP` (`IDMedicamento`),
   KEY `fk_pacMP` (`IDPaciente`),
-  CONSTRAINT `fk_medMP` FOREIGN KEY (`IDMedicamento`) REFERENCES `medicamentos` (`IDMedicamento`),
-  CONSTRAINT `fk_pacMP` FOREIGN KEY (`IDPaciente`) REFERENCES `paciente` (`IDPaciente`),
+  CONSTRAINT `fk_medMP` FOREIGN KEY (`IDMedicamento`) REFERENCES `medicamentos` (`IDMedicamento`) ON DELETE CASCADE,
+  CONSTRAINT `fk_pacMP` FOREIGN KEY (`IDPaciente`) REFERENCES `paciente` (`IDPaciente`) ON DELETE CASCADE,
   PRIMARY KEY (`IDMedPac`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -75,6 +75,23 @@ CREATE TABLE `doctores` (
   PRIMARY KEY (`IDDoctor`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
+ CREATE TABLE `especialidades` (
+  `IDEspecialidad` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`IDEspecialidad`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `especialidadesdoctores` (
+  `IDEspDoctor` int(11) NOT NULL AUTO_INCREMENT,
+  `IDDoctor` int(11) NOT NULL,
+  `IDEspecialidad` int(11) NOT NULL,
+  KEY `fk_espED` (`IDEspecialidad`),
+  KEY `fk_drED` (`IDDoctor`),
+  CONSTRAINT `fk_espED` FOREIGN KEY (`IDEspecialidad`) REFERENCES `especialidades` (`IDEspecialidad`) ON DELETE CASCADE,
+  CONSTRAINT `fk_drED` FOREIGN KEY (`IDDoctor`) REFERENCES `doctores` (`IDDoctor`),
+  PRIMARY KEY(`IDEspDoctor`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `citasdoctores` (
   `IDCitaDoctor` int(11) NOT NULL AUTO_INCREMENT,
@@ -82,9 +99,61 @@ CREATE TABLE `citasdoctores` (
   `IDDoctor` int(11) NOT NULL,
   KEY `fk_citaCD` (`IDCita`),
   KEY `fk_drCD` (`IDDoctor`),
-  CONSTRAINT `fk_citaCD` FOREIGN KEY (`IDCita`) REFERENCES `citas` (`IDCita`),
-  CONSTRAINT `fk_drCD` FOREIGN KEY (`IDDoctor`) REFERENCES `doctores` (`IDDoctor`)
+  PRIMARY KEY (`IDCitaDoctor`),
+  CONSTRAINT `fk_citaCD` FOREIGN KEY (`IDCita`) REFERENCES `citas` (`IDCita`) ON DELETE CASCADE,
+  CONSTRAINT `fk_drCD` FOREIGN KEY (`IDDoctor`) REFERENCES `doctores` (`IDDoctor`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+ CREATE TABLE `molecularTest` (
+  `IDMolecularTest` int(11) NOT NULL AUTO_INCREMENT,
+  `IDPaciente` int(11),
+  `resultados` varchar(250) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  KEY `fk_molTestPac` (`IDPaciente`),
+  CONSTRAINT `fk_molTestPac` FOREIGN KEY (`IDPaciente`) REFERENCES `paciente`(`IDPaciente`),
+  PRIMARY KEY (`IDMolecularTest`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
+ CREATE TABLE `tratamiento` (
+  `IDTratamiento` int(11) NOT NULL AUTO_INCREMENT,
+  `indicaciones` varchar(500) NOT NULL,
+  `IDPaciente` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  KEY `fk_tratPac` (`IDPaciente`),
+  CONSTRAINT `fk_tratPac` FOREIGN KEY (`IDPaciente`) REFERENCES `paciente`(`IDPaciente`),
+  PRIMARY KEY (`IDTratamiento`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `tratamientodoctores` (
+  `IDTratPac` int(11) NOT NULL AUTO_INCREMENT,
+  `IDTratamiento` int(11) NOT NULL,
+  `IDDoctor` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  KEY `fk_tratTD` (`IDTratamiento`),
+  KEY `fk_drTD` (`IDDoctor`),
+  CONSTRAINT `fk_tratTD` FOREIGN KEY (`IDTratamiento`) REFERENCES `tratamiento` (`IDTratamiento`) ON DELETE CASCADE,
+  CONSTRAINT `fk_drTD` FOREIGN KEY (`IDDoctor`) REFERENCES `doctores` (`IDDoctor`),
+  PRIMARY KEY (`IDTratPac`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `aseguradora` (
+  `IDAseguradora` int(11) NOT NULL AUTO_INCREMENT,
+  `nombreAseguradora` varchar(500) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`IDAseguradora`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `aseguradorapaciente` (
+  `IDAsPac` int(11) NOT NULL AUTO_INCREMENT,
+  `IDAseguradora` int(11) NOT NULL,
+  `IDPaciente` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  KEY `fk_asegAP` (`IDAseguradora`),
+  KEY `fk_pacAP` (`IDPaciente`),
+  CONSTRAINT `fk_asegAP` FOREIGN KEY (`IDAseguradora`) REFERENCES `aseguradora` (`IDAseguradora`) ON DELETE CASCADE,
+  CONSTRAINT `fk_pacAP` FOREIGN KEY (`IDPaciente`) REFERENCES `paciente` (`IDPaciente`),
+  PRIMARY KEY (`IDAsPac`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE `links` (

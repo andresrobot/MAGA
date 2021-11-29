@@ -3,20 +3,33 @@
         <div class="col-md-4 mx-auto">
             <div class="card text-center">
                 <div class="card-body">
-                    <h3>Welcome {{user.fullname}}</h3>
-                    <h4>{{user.username}}</h4>
+                    {{#if user.IDPaciente}}
+                    <h3>Bienvenido paciente: {{data.nombre}} {{data.apellidoPaterno}}</h3>
+                    
                     <a href="/concierge" class="btn btn-primary m-4">
                         Concierge    
                     </a>
-                    <a href="/" class="btn btn-primary m-4">
+                    <a href="/molecularTest" class="btn btn-primary m-4">
                         Molecular Test   
                     </a>
-                    <a href="/" class="btn btn-primary m-4">
+                    <a href="/controlCare" class="btn btn-primary m-4">
                         Control Care   
                     </a>
-                    <a href="/" class="btn btn-primary m-4">
+                    <a href="/recordatorios" class="btn btn-primary m-4">
                         Recordatorios   
                     </a>
+                    {{#if user.IDDoctor}}
+                    <h3>Bienvenido DR. {{data.apellidoPaterno}}</h3>
+                    
+                    <a href="/pacientes" class="btn btn-primary m-4">
+                        Pacientes    
+                    </a>
+                    <a href="/recordatorios" class="btn btn-primary m-4">
+                        Recordatorios   
+                    </a>
+                    {{/if}}
+                    {{/if}}
+         
                 </div>
             </div>
         </div>

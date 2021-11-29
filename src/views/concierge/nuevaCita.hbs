@@ -14,12 +14,12 @@
                         </div>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                                <label class="input-group-text" for="inputGroupSelect01">DOCTORES/ESPECIALIDAD</label>
                             </div>
                             <select class="custom-select" id="inputGroupSelect01" name="IDDoctor">
                                 <option selected>Choose...</option>
                                 {{#each doctores}}
-                                <option value={{IDDoctor}} >DR. {{apellidoPaterno}} - {{especialidad}}</option>
+                                <option value={{IDDoctor}} >DR. {{apellidoPaterno}} - {{nombre}}</option>
                                 {{/each}}
                             </select>
                         </div>

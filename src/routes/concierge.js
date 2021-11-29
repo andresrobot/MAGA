@@ -24,8 +24,31 @@ router.get('/citas', isLoggedInAsPacient, async (req, res) => {
 });
 
 router.get('/nuevaCita', isLoggedInAsPacient, async (req, res) => {
-    const doctores = await pool.query(`SELECT * FROM doctores`);
+    const doctores = await pool.query(`SELECT * 
+    FROM doctores INNER JOIN especialidadesdoctores
+    ON especialidadesdoctores.IDDoctor = doctores.IDDoctor
+    INNER JOIN especialidades
+    ON especialidadesdoctores.IDEspecialidad = especialidades.IDEspecialidad`);
+    console.log(doctores);
     res.render('concierge/nuevaCita', {doctores});
+
+});
+
+router.get('/tratamiento', isLoggedInAsPacient, async (req, res) => {
+    const tratamiento = await pool.query(`SELECT * 
+    FROM tratamiento WHERE IDPaciente = ?` , [req.user.IDPaciente]);
+    const medicamentos = await pool.query(`select medicamentos.IDMedicamento, medicamentos.nombreMedicamento, medicamentostratamiento.indicaciones
+    from medicamentos inner join medicamentostratamiento
+    on medicamentostratamiento.IDMedicamento=medicamentos.IDMedicamento
+    where medicamentostratamiento.IDTratamiento=?`, [tratamiento[0].IDTratamiento]);
+    const doctores = await pool.query(`select *
+    from doctores inner join tratamientodoctores
+    on tratamientodoctores.IDDoctor=doctores.IDDoctor
+    where tratamientodoctores.IDTratamiento=?`, [tratamiento[0].IDTratamiento]);
+    console.log(medicamentos)
+    console.log(doctores);
+    console.log(tratamiento);
+    res.render('concierge/tratamiento', {tratamiento, medicamentos, doctores});
 
 });
 
