@@ -11,12 +11,6 @@
                     <input type="time" id="inputMDEx1" class="form-control" name="hora" value={{cita.hora}}>
                     <label for="inputMDEx1">Determine una nueva hora.</label>
                 </div>
-                <select class="form-group" id="inputGroupSelect01" name="IDDoctor">
-                    <option selected>Choose...</option>
-                    {{#each doctores}}
-                    <option value={{IDDoctor}}>DR. {{apellidoPaterno}} - {{IDDoctor}}</option>
-                    {{/each}}
-                </select>
                 <div class="form-group">
                     <button class="btn btn-success btn-block">
                         Save

@@ -3,8 +3,8 @@
     <a class="navbar-brand" href="/">
       <i class="fas fa-link"></i> MAGA
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
-      aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -13,26 +13,36 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-          MAGA
+            SERVICIOS
           </a>
+
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/concierge">Concierge</a>
+            {{#if user.IDPaciente}}
+            <a class="dropdown-item" href="/concierge">CONCIERGE</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/concierge/citas">Citas</a>
+            <a class="dropdown-item" href="/molecularTest">MOLECULAR TEST</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/controlCare">CONTROL CARE</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/molecularTest">RECORDATORIOS</a>
+
+            {{else}}
+            <a class="dropdown-item" href="/molecularTest">RECORDATORIOS</a>
+            {{/if}}
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/profile">Profile</a>
+          <a class="nav-link" href="/profile">PERFIL</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/logout">Logout</a>
+          <a class="nav-link" href="/logout">CERRAR SESIÓN</a>
         </li>
         {{else}}
         <li class="nav-item">
-          <a class="nav-link" href="/signin">SignIn</a>
+          <a class="nav-link" href="/signin">INICIAR SESIÓN</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/signup">SignUp</a>
+          <a class="nav-link" href="/signup">REGISTRO</a>
         </li>
         {{/if}}
       </ul>
