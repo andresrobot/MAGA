@@ -155,15 +155,11 @@ CREATE TABLE `aseguradorapaciente` (
   PRIMARY KEY (`IDAsPac`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-CREATE TABLE `links` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(150) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `fk_user` (`user_id`),
-  CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+CREATE TABLE `circulo` (
+  `IDCirculo` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NOT NULL,
+  `edad` int(11) NOT NULL,
+  `apellidoMaterno` varchar(50) NOT NULL,
+  `apellidoPaterno` varchar(50) NOT NULL,
+  PRIMARY KEY (`IDCirculo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;

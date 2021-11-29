@@ -11,6 +11,13 @@ router.get('/', isLoggedInAsPacient, async (req, res) => {
     res.render('concierge/panel', {datos: datosPaciente[0]});
 });
 
+router.get('/agregarCirculo', isLoggedInAsPacient, async (req, res) => {
+    const datosPaciente= await pool.query(`SELECT * 
+    FROM paciente WHERE IDPaciente = ?`, req.user.IDPaciente)
+    console.log(datosPaciente)
+    res.render('concierge/agregarCirculo', {datos: datosPaciente[0]});
+});
+
 router.get('/citas', isLoggedInAsPacient, async (req, res) => {
     const citas = await pool.query(`SELECT * 
     FROM citas INNER JOIN citasdoctores
@@ -105,11 +112,11 @@ router.post('/nuevaCita', async (req, res) => {
         hora: hora,
         IDPaciente: req.user.IDPaciente
     };
-    await pool.query('INSERT INTO citas set ?', [nuevaCita]);
-    const cita_ID = await pool.query('SELECT citas.IDCita FROM citas WHERE fecha = ?', fecha)
+    const test = await pool.query('INSERT INTO citas set ?', [nuevaCita]);
+    //console.log(test)
     const nuevaCitaPacienteDoctor = {
         IDDoctor: IDDoctor,
-        IDCita : cita_ID[0].IDCita
+        IDCita : test.insertId
     }
     console.log("HOOOOLA", nuevaCitaPacienteDoctor);
     

@@ -55,10 +55,12 @@ router.get('/profile', isLoggedIn, async (req, res) => {
   }
   else if(req.user.IDAseguradora)
   {
-
+    const data = await pool.query(`SELECT * FROM aseguradora WHERE IDAseguradora = ?`, req.user.IDAseguradora);
+    res.render('profile', {data: data[0]})
   }
   else if (req.user.IDCirculo){
-    
+    const data = await pool.query(`SELECT * FROM circulo WHERE IDAseguradora = ?`, req.user.IDAseguradora);
+    res.render('profile', {data: data[0]})
   }
 });
 

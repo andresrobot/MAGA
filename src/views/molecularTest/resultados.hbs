@@ -1,22 +1,13 @@
 <div class="container p-4">
     <div class="row">
-        {{#each citas}}
+        {{#each data}}
         <div class="col-md-3">
             <div class="card text-center">
                 <div class="card-body">
 
                     <h3 class="card-title text-uppercase">
-                        {{fecha}}
+                        {{resultados}}
                     </h3>
-                    <p class="text-muted">
-                        Hora de la cita: {{hora}}
-                    </p>
-                    <p class="text-muted">
-                        DR. {{apellidoPaterno}}
-                    </p>
-                    <p class="text-muted">
-                     {{especialidad}}
-                    </p>
                     <p class="text-muted">
                         {{timeago created_at}}
                     </p>

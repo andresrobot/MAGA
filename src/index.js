@@ -54,8 +54,9 @@ app.use((req, res, next) => {
 // Routes
 app.use(require('./routes/index'));
 app.use(require('./routes/authentication'));
-app.use('/links', require('./routes/links'));
+//app.use('/links', require('./routes/links'));
 app.use('/concierge', require('./routes/concierge'));
+app.use('/molecularTest', require('./routes/molecularTest'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));
