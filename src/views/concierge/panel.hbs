@@ -4,8 +4,16 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h3>Concierge</h3>
-                    
+                    {{#if datos.IDPaciente}}
                     <h4>Paciente: {{datos.nombre}} {{datos.apellidoPaterno}}</h4>
+                    <a href="/concierge/agregarCirculo" class="btn btn-primary m-4">
+                        Agregar miembros a círculo cercano.   
+                    </a>    
+                    {{else}}
+                    {{#if datos.IDCirculo}}
+                    <h4>{{datos.nombre}} {{datos.apellidoPaterno}}</h4>
+                    {{/if}}
+                    {{/if}}
                     <a href="/concierge/citas" class="btn btn-primary m-4">
                         Citas   
                     </a>
@@ -15,15 +23,8 @@
                     <a href="/concierge/tratamiento" class="btn btn-primary m-4">
                         Tratamiento    
                     </a>
-                    <a href="/concierge/analiticas" class="btn btn-primary m-4">
-                        Analíticas    
-                    </a>
-                    <a href="/concierge/gestionSeguro" class="btn btn-primary m-4">
-                        Gestión de seguro    
-                    </a>
-                    <a href="/concierge/agregarCirculo" class="btn btn-primary m-4">
-                        Agregar miembros a círculo cercano.   
-                    </a>                      
+        
+                  
                 </div>
             </div>
         </div>

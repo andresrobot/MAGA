@@ -1,30 +1,68 @@
 const express = require('express');
 const router = express.Router();
-
+const passport = require('passport');
 const pool = require('../database');
 const { isLoggedInAsPacient } = require('../lib/auth');
 
+
 router.get('/', isLoggedInAsPacient, async (req, res) => {
-    const datosPaciente= await pool.query(`SELECT * 
-    FROM paciente WHERE IDPaciente = ?`, req.user.IDPaciente)
-    console.log(datosPaciente)
-    res.render('concierge/panel', {datos: datosPaciente[0]});
+    if(req.user.IDCirculo)
+    {
+        const datosPaciente= await pool.query(`SELECT * 
+        FROM paciente INNER JOIN circulopaciente ON circulopaciente.IDPaciente = paciente.IDPaciente INNER JOIN
+        circulo ON circulopaciente.IDCirculo = circulo.IDCirculo WHERE circulopaciente.IDCirculo= ?`, req.user.IDCirculo);
+        console.log(datosPaciente)
+        let datos = {IDCirculo: datosPaciente[0].IDCirculo,
+                    nombre:datosPaciente[0].nombre,
+                    apellidoPaterno:datosPaciente[0].apellidoPaterno};
+        console.log(datos)     
+        res.render('concierge/panel', {datos});
+    }
+    else{
+        const datosPaciente= await pool.query(`SELECT * 
+        FROM paciente WHERE IDPaciente = ?`, req.user.IDPaciente)
+        console.log(datosPaciente)
+        res.render('concierge/panel', {datos: datosPaciente[0]});
+    }
+
 });
 
 router.get('/agregarCirculo', isLoggedInAsPacient, async (req, res) => {
+    let id_Paciente= null;
+    if (req.user.IDCirculo)
+    {
+        let Paciente= await pool.query(`SELECT * 
+        FROM paciente INNER JOIN circulopaciente ON circulopaciente.IDPaciente = paciente.IDPaciente
+        INNER JOIN circulo ON circulopaciente.IDCirculo = circulo.IDCirculo`)
+        id_Paciente = Paciente[0].IDPaciente
+    }
+    else{
+        id_Paciente = req.user.IDPaciente
+    }    
     const datosPaciente= await pool.query(`SELECT * 
-    FROM paciente WHERE IDPaciente = ?`, req.user.IDPaciente)
+    FROM paciente WHERE IDPaciente = ?`, id_Paciente)
     console.log(datosPaciente)
     res.render('concierge/agregarCirculo', {datos: datosPaciente[0]});
 });
 
 router.get('/citas', isLoggedInAsPacient, async (req, res) => {
+    let id_Paciente= null;
+    if (req.user.IDCirculo)
+    {
+        let Paciente= await pool.query(`SELECT * 
+        FROM paciente INNER JOIN circulopaciente ON circulopaciente.IDPaciente = paciente.IDPaciente
+        INNER JOIN circulo ON circulopaciente.IDCirculo = circulo.IDCirculo`)
+        id_Paciente = Paciente[0].IDPaciente
+    }
+    else{
+        id_Paciente = req.user.IDPaciente
+    }
     const citas = await pool.query(`SELECT * 
     FROM citas INNER JOIN citasdoctores
     ON citasdoctores.IDCita = citas.IDCita
     INNER JOIN doctores 
     on citasdoctores.IDDoctor = doctores.IDDoctor
-    WHERE IDPaciente = ?`, [req.user.IDPaciente]);
+    WHERE IDPaciente = ?`, [id_Paciente]);
     //console.log(citas);
     res.render('concierge/citas', { citas });
 
@@ -42,8 +80,19 @@ router.get('/nuevaCita', isLoggedInAsPacient, async (req, res) => {
 });
 
 router.get('/tratamiento', isLoggedInAsPacient, async (req, res) => {
+    let id_Paciente= null;
+    if (req.user.IDCirculo)
+    {
+        let Paciente= await pool.query(`SELECT * 
+        FROM paciente INNER JOIN circulopaciente ON circulopaciente.IDPaciente = paciente.IDPaciente
+        INNER JOIN circulo ON circulopaciente.IDCirculo = circulo.IDCirculo`)
+        id_Paciente = Paciente[0].IDPaciente
+    }
+    else{
+        id_Paciente = req.user.IDPaciente
+    }
     const tratamiento = await pool.query(`SELECT * 
-    FROM tratamiento WHERE IDPaciente = ?` , [req.user.IDPaciente]);
+    FROM tratamiento WHERE IDPaciente = ?` , [id_Paciente]);
     const medicamentos = await pool.query(`select medicamentos.IDMedicamento, medicamentos.nombreMedicamento, medicamentostratamiento.indicaciones
     from medicamentos inner join medicamentostratamiento
     on medicamentostratamiento.IDMedicamento=medicamentos.IDMedicamento
@@ -60,10 +109,21 @@ router.get('/tratamiento', isLoggedInAsPacient, async (req, res) => {
 });
 
 router.get('/medicamentos', isLoggedInAsPacient, async (req, res) => {
+    let id_Paciente= null;
+    if (req.user.IDCirculo)
+    {
+        let Paciente= await pool.query(`SELECT * 
+        FROM paciente INNER JOIN circulopaciente ON circulopaciente.IDPaciente = paciente.IDPaciente
+        INNER JOIN circulo ON circulopaciente.IDCirculo = circulo.IDCirculo`)
+        id_Paciente = Paciente[0].IDPaciente
+    }
+    else{
+        id_Paciente = req.user.IDPaciente
+    }
     const medicamentos = await pool.query(`select medicamentos.IDMedicamento, medicamentos.nombreMedicamento, medicamentospacientes.indicaciones
     from medicamentos inner join medicamentospacientes
     on medicamentospacientes.IDMedicamento=medicamentos.IDMedicamento
-    where medicamentospacientes.IDPaciente=?`, [req.user.IDPaciente]);
+    where medicamentospacientes.IDPaciente=?`, [id_Paciente]);
     res.render('concierge/medicamentos', { medicamentos });
 });
 
@@ -104,13 +164,28 @@ router.post('/editCita/:id', isLoggedInAsPacient, async (req, res) => {
     req.flash('success', 'Cita actualizada');
     res.redirect('/concierge/citas');
 });
-
-router.post('/nuevaCita', async (req, res) => {
+router.post('/agregarCirculo', isLoggedInAsPacient, passport.authenticate('local.signupC', {
+    successRedirect: '/profile',
+    failureRedirect: '/agregarCirculo',
+    failureFlash: true
+  }));
+router.post('/nuevaCita', isLoggedInAsPacient, async (req, res) => {
+    let id_Paciente= null;
+    if (req.user.IDCirculo)
+    {
+        let Paciente= await pool.query(`SELECT * 
+        FROM paciente INNER JOIN circulopaciente ON circulopaciente.IDPaciente = paciente.IDPaciente
+        INNER JOIN circulo ON circulopaciente.IDCirculo = circulo.IDCirculo`)
+        id_Paciente = Paciente[0].IDPaciente
+    }
+    else{
+        id_Paciente = req.user.IDPaciente
+    }
     const { IDDoctor, fecha, hora } = req.body;
     const nuevaCita = {
         fecha: fecha,
         hora: hora,
-        IDPaciente: req.user.IDPaciente
+        IDPaciente: id_Paciente
     };
     const test = await pool.query('INSERT INTO citas set ?', [nuevaCita]);
     //console.log(test)
@@ -124,4 +199,5 @@ router.post('/nuevaCita', async (req, res) => {
     req.flash('success', 'Cita agendada correctamente');
     res.redirect('/concierge/citas');
 });
+
 module.exports = router;

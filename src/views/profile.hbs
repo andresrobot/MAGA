@@ -3,33 +3,52 @@
         <div class="col-md-4 mx-auto">
             <div class="card text-center">
                 <div class="card-body">
-                    {{#if user.IDPaciente}}
+                    {{#if data.IDPaciente}}
                     <h3>Bienvenido paciente: {{data.nombre}} {{data.apellidoPaterno}}</h3>
-                    
-                    <a href="/concierge" class="btn btn-primary m-4">
-                        Concierge    
+             <a href="/concierge" class="btn btn-primary m-4">
+                        Concierge
                     </a>
                     <a href="/molecularTest" class="btn btn-primary m-4">
-                        Molecular Test   
+                        Molecular Test
                     </a>
                     <a href="/controlCare" class="btn btn-primary m-4">
-                        Control Care   
+                        Control Care
                     </a>
                     <a href="/recordatorios" class="btn btn-primary m-4">
-                        Recordatorios   
+                        Recordatorios
                     </a>
-                    {{#if user.IDDoctor}}
-                    <h3>Bienvenido DR. {{data.apellidoPaterno}}</h3>
-                    
+
+                    {{else}}
+                    {{#if data.IDCirculo}}
+                    <h3>Bienvenido {{data.nombre}} {{data.apellidoPaterno}}</h3>
+
+
+
+
+                    <a href="/concierge" class="btn btn-primary m-4">
+                        Concierge
+                    </a>
+                    <a href="/molecularTest" class="btn btn-primary m-4">
+                        Molecular Test
+                    </a>
+                    <a href="/controlCare" class="btn btn-primary m-4">
+                        Control Care
+                    </a>
+                    <a href="/recordatorios" class="btn btn-primary m-4">
+                        Recordatorios
+                    </a>
+                    {{else}}
+                    {{#if data.IDDoctor}}
+                    <h3>Bienvenido DR(A). {{data.nombre}} {{data.apellidoPaterno}}</h3>
+                    <a href="/recordatoriosDR" class="btn btn-primary m-4">
+                        Recordatorios
+                    </a>
                     <a href="/pacientes" class="btn btn-primary m-4">
-                        Pacientes    
-                    </a>
-                    <a href="/recordatorios" class="btn btn-primary m-4">
-                        Recordatorios   
+                        Pacientes.
                     </a>
                     {{/if}}
                     {{/if}}
-         
+                    {{/if}}
                 </div>
             </div>
         </div>

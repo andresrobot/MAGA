@@ -59,7 +59,8 @@ router.get('/profile', isLoggedIn, async (req, res) => {
     res.render('profile', {data: data[0]})
   }
   else if (req.user.IDCirculo){
-    const data = await pool.query(`SELECT * FROM circulo WHERE IDAseguradora = ?`, req.user.IDAseguradora);
+    const data = await pool.query(`SELECT * FROM circulo WHERE IDCirculo = ?`, req.user.IDCirculo);
+    console.log(data[0].IDCirculo)
     res.render('profile', {data: data[0]})
   }
 });

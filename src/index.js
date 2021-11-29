@@ -57,6 +57,7 @@ app.use(require('./routes/authentication'));
 //app.use('/links', require('./routes/links'));
 app.use('/concierge', require('./routes/concierge'));
 app.use('/molecularTest', require('./routes/molecularTest'));
+app.use('/pacientes', require('./routes/pacientes'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));

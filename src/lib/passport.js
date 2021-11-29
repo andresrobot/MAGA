@@ -29,35 +29,48 @@ passport.use('local.signup', new LocalStrategy({
   passReqToCallback: true
 }, async (req, username, password, done) => {
 
-  const { nombre, apellidoMaterno, apellidoPaterno , edad, IDPaciente} = req.body;
+  const { nombre, apellidoMaterno, apellidoPaterno , edad } = req.body;
   let newUser = {
     username,
     password
   };
   newUser.password = await helpers.encryptPassword(password);
   // Saving in the Database
-  if(!IDPaciente){
-    let newPaciente = {
-      nombre,
-      apellidoPaterno,
-      apellidoMaterno,
-      edad
-    };
-    const paciente = await pool.query('INSERT INTO paciente SET ? ', newPaciente);
-    newUser.IDPaciente = paciente.insertId;
-  }
-  else if(IDPaciente)
-    {
-      let newCirculo = {
-        nombre,
-        apellidoPaterno,
-        apellidoMaterno,
-        edad,
-        IDPaciente
-      };
-      const circulo = await pool.query('INSERT INTO circulo SET ? ', newCirculo);
-      newUser.IDCirculo = circulo.insertId;
-    }
+  let newPaciente = {
+    nombre,
+    apellidoPaterno,
+    apellidoMaterno,
+    edad
+  };
+  const paciente = await pool.query('INSERT INTO paciente SET ? ', newPaciente);
+  newUser.IDPaciente = paciente.insertId;
+
+  const result = await pool.query('INSERT INTO users SET ? ', newUser);
+  newUser.id = result.insertId;
+  return done(null, newUser);
+}));
+
+passport.use('local.signupC', new LocalStrategy({
+  usernameField: 'username',
+  passwordField: 'password',
+  passReqToCallback: true
+}, async (req, username, password, done) => {
+
+  const { nombre, apellidoMaterno, apellidoPaterno , edad } = req.body;
+  let newUser = {
+    username,
+    password
+  };
+  newUser.password = await helpers.encryptPassword(password);
+  // Saving in the Database
+  let newCirculo = {
+    nombre,
+    apellidoPaterno,
+    apellidoMaterno,
+    edad
+  };
+  const circulo = await pool.query('INSERT INTO circulo SET ? ', newCirculo);
+  newUser.IDCirculo = circulo.insertId;
 
   const result = await pool.query('INSERT INTO users SET ? ', newUser);
   newUser.id = result.insertId;

@@ -24,15 +24,18 @@
                     </p>
                     {{/each}}
 
-                </div>
-            </div>
+                    <a href="/pacientes/editarTratamiento/{{IDTratamiento}}" class="btn btn-primary m-4">
+                        Editar Tratamiento    
+                    </a>
+
         </div>
         {{else}}
         <div class="col-md-4 mx-auto">
             <div class="card card-body text-center">
                 <p>No hay ningun tratamiento asociado.</p>
-
-            </div>
+                    <a href="/pacientes/editarTratamiento" class="btn btn-primary m-4">
+                        Editar Tratamiento    
+                    </a>
         </div>
         {{/each}}
     </div>

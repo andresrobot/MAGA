@@ -7,7 +7,14 @@ module.exports = {
     },
     isLoggedInAsPacient (req, res, next) {
         //console.log(req.user.IDPaciente)
-        if (req.isAuthenticated() && req.user.IDPaciente != null) {
+        if ((req.isAuthenticated() && req.user.IDPaciente != null) ||(req.isAuthenticated() && req.user.IDCirculo != null) ) {
+            return next();
+        }
+        return res.redirect('/signin');
+    },
+    isLoggedInAsDoctor (req, res, next) {
+        //console.log(req.user.IDPaciente)
+        if ((req.isAuthenticated() && req.user.IDDoctor != null)) {
             return next();
         }
         return res.redirect('/signin');
