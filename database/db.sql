@@ -1,3 +1,12 @@
+-- phpMyAdmin SQL Dump
+-- version 5.1.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 03-12-2021 a las 10:49:27
+-- Versión del servidor: 10.4.21-MariaDB
+-- Versión de PHP: 8.0.12
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -23,6 +32,14 @@ CREATE TABLE `aseguradora` (
   `nombreAseguradora` varchar(500) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `aseguradora`
+--
+
+INSERT INTO `aseguradora` (`IDAseguradora`, `nombreAseguradora`, `created_at`) VALUES
+(4, 'GNP', '2021-12-03 09:48:49'),
+(5, 'MONTERREY', '2021-12-03 09:49:05');
 
 -- --------------------------------------------------------
 
@@ -373,7 +390,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('nEapI1XOltbofaxJO11p7NmmMamSEoAn', 1638305841, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"passport\":{\"user\":3}}');
+('V8OAqX8uSgMMjMRi3BeYCWLylX9LP5aP', 1638392265, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"passport\":{}}');
 
 -- --------------------------------------------------------
 
@@ -393,7 +410,7 @@ CREATE TABLE `tratamiento` (
 --
 
 INSERT INTO `tratamiento` (`IDTratamiento`, `indicaciones`, `IDPaciente`, `created_at`) VALUES
-(4, 'NUEVO TRATAMIENTO', 3, '2021-11-29 13:10:55');
+(4, 'tomar medidas', 3, '2021-11-29 13:10:55');
 
 -- --------------------------------------------------------
 
@@ -593,7 +610,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `aseguradora`
 --
 ALTER TABLE `aseguradora`
-  MODIFY `IDAseguradora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `IDAseguradora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `aseguradorapaciente`

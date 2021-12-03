@@ -31,7 +31,7 @@ router.post('/servicios', isLoggedInAsPacient, async (req, res) => {
     else{
         id_Paciente = req.user.IDPaciente
     }
-    const { IDDoctor, fecha, hora } = req.body;
+    const { IDServicio, fecha, hora } = req.body;
     const nuevaCita = {
         fecha: fecha,
         hora: hora,
@@ -40,7 +40,7 @@ router.post('/servicios', isLoggedInAsPacient, async (req, res) => {
     const test = await pool.query('INSERT INTO citas set ?', [nuevaCita]);
     //console.log(test)
     const nuevaCitaPacienteServicio = {
-        IDServicio: IDDoctor,
+        IDServicio: IDServicio,
         IDCita : test.insertId
     }
     console.log("HOOOOLA", nuevaCitaPacienteServicio);

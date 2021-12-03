@@ -45,6 +45,23 @@ router.get('/agregarCirculo', isLoggedInAsPacient, async (req, res) => {
     res.render('concierge/agregarCirculo', {datos: datosPaciente[0]});
 });
 
+router.get('/gestionSeguro', isLoggedInAsPacient, async (req, res) => {
+    let id_Paciente= null;
+    if (req.user.IDCirculo)
+    {
+        let Paciente= await pool.query(`SELECT * 
+        FROM paciente INNER JOIN circulopaciente ON circulopaciente.IDPaciente = paciente.IDPaciente
+        INNER JOIN circulo ON circulopaciente.IDCirculo = circulo.IDCirculo`)
+        id_Paciente = Paciente[0].IDPaciente
+    }
+    else{
+        id_Paciente = req.user.IDPaciente
+    }    
+    const datosSeguro= await pool.query(`SELECT * 
+    FROM aseguradora`)
+    console.log(datosPaciente)
+    res.render('concierge/gestionSeguro', {seguros: datosSeguro});
+});
 router.get('/citas', isLoggedInAsPacient, async (req, res) => {
     let id_Paciente= null;
     if (req.user.IDCirculo)
@@ -169,7 +186,7 @@ router.post('/agregarCirculo', isLoggedInAsPacient, passport.authenticate('local
     failureRedirect: '/agregarCirculo',
     failureFlash: true
   }));
-router.post('/nuevaCita', isLoggedInAsPacient, async (req, res) => {
+router.post('/gestionSeguro', isLoggedInAsPacient, async (req, res) => {
     let id_Paciente= null;
     if (req.user.IDCirculo)
     {
@@ -181,23 +198,17 @@ router.post('/nuevaCita', isLoggedInAsPacient, async (req, res) => {
     else{
         id_Paciente = req.user.IDPaciente
     }
-    const { IDDoctor, fecha, hora } = req.body;
+    const { IDDoctor, IDAseguradora } = req.body;
     const nuevaCita = {
-        fecha: fecha,
-        hora: hora,
+        IDAseguradora: IDAseguradora,
         IDPaciente: id_Paciente
     };
-    const test = await pool.query('INSERT INTO citas set ?', [nuevaCita]);
-    //console.log(test)
-    const nuevaCitaPacienteDoctor = {
-        IDDoctor: IDDoctor,
-        IDCita : test.insertId
-    }
-    console.log("HOOOOLA", nuevaCitaPacienteDoctor);
+    const test = await pool.query('INSERT INTO aseguradorapaciente set ?', [nuevaCita]);
     
-    await pool.query('INSERT INTO citasdoctores set ?', [nuevaCitaPacienteDoctor]);
-    req.flash('success', 'Cita agendada correctamente');
-    res.redirect('/concierge/citas');
+    
+    req.flash('success', 'Reembolso procesado correctamente');
+    res.redirect('/concierge/');
+  
 });
 
 module.exports = router;
